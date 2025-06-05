@@ -1,0 +1,21 @@
+version: 2.1
+
+jobs:
+  run-postman-tests:
+    docker:
+      - image: postman/newman:alpine
+    steps:
+      - checkout
+      - run:
+          name: Run Postman tests
+          command: >
+            newman run r_d.postman_collection\ \(1\).json
+            --environment r_d_clickup.postman_environment\ \(1\).json
+            --reporters cli,junit
+            --reporter-junit-export newman-report.xml
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - run-postman-tests
