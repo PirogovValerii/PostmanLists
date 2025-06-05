@@ -1,0 +1,1316 @@
+{
+	"info": {
+		"_postman_id": "a8c41fee-3712-4ac4-bdab-7a8cb533a6e8",
+		"name": "r_d",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21951586",
+		"_collection_link": "https://cloudy-satellite-678641.postman.co/workspace/RD~76df16a8-5ac2-4884-b353-eadf15a0c270/collection/21951586-a8c41fee-3712-4ac4-bdab-7a8cb533a6e8?action=share&source=collection_link&creator=21951586"
+	},
+	"item": [
+		{
+			"name": "Spaces",
+			"item": [
+				{
+					"name": "Get Spaces",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v2/team/{{team_id}}/space",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"team",
+								"{{team_id}}",
+								"space"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Spaces",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"space_id\", jsonData.id);",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"//schema",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"id\": { \"type\": \"string\" },",
+									"        \"name\": { \"type\": \"string\" },",
+									"        \"color\": { \"type\": [\"string\", \"null\"] },",
+									"        \"private\": { \"type\": \"boolean\" },",
+									"        \"avatar\": { \"type\": [\"string\", \"null\"] },",
+									"        \"admin_can_manage\": { \"type\": [\"boolean\", \"null\"] },",
+									"        \"statuses\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"id\": { \"type\": \"string\" },",
+									"                    \"status\": { \"type\": \"string\" },",
+									"                    \"type\": { \"type\": \"string\" },",
+									"                    \"orderindex\": { \"type\": \"integer\" },",
+									"                    \"color\": { \"type\": \"string\" }",
+									"                },",
+									"                \"required\": [\"id\", \"status\", \"type\", \"orderindex\", \"color\"]",
+									"            }",
+									"        },",
+									"        \"multiple_assignees\": { \"type\": \"boolean\" },",
+									"        \"features\": {",
+									"            \"type\": \"object\",",
+									"            \"properties\": {",
+									"                \"due_dates\": { \"type\": \"object\" },",
+									"                \"sprints\": { \"type\": \"object\" },",
+									"                \"time_tracking\": { \"type\": \"object\" },",
+									"                \"points\": { \"type\": \"object\" },",
+									"                \"custom_items\": { \"type\": \"object\" },",
+									"                \"tags\": { \"type\": \"object\" },",
+									"                \"time_estimates\": { \"type\": \"object\" },",
+									"                \"checklists\": { \"type\": \"object\" },",
+									"                \"milestones\": { \"type\": \"object\" },",
+									"                \"custom_fields\": { \"type\": \"object\" },",
+									"                \"remap_dependencies\": { \"type\": \"object\" },",
+									"                \"dependency_warning\": { \"type\": \"object\" },",
+									"                \"status_pies\": { \"type\": \"object\" },",
+									"                \"multiple_assignees\": { \"type\": \"object\" },",
+									"                \"portfolios\": { \"type\": \"object\" },",
+									"                \"emails\": { \"type\": \"object\" },",
+									"                \"scheduler_enabled\": { \"type\": \"boolean\" }",
+									"            }",
+									"        },",
+									"        \"archived\": { \"type\": \"boolean\" }",
+									"    },",
+									"    \"required\": [",
+									"        \"id\", \"name\", \"private\", \"statuses\",",
+									"        \"multiple_assignees\", \"features\", \"archived\"",
+									"    ]",
+									"};",
+									"",
+									"pm.test(\"✅ JSON Schema is valid for Space\", function () {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{$randomFirstName}}\",\n  \"multiple_assignees\": true,\n  \"features\": {\n    \"due_dates\": {\n      \"enabled\": true,\n      \"start_date\": true,\n      \"remap_due_dates\": true,\n      \"remap_closed_due_date\": true\n    },\n    \"time_tracking\": {\n      \"enabled\": true\n    },\n    \"tags\": {\n      \"enabled\": true\n    },\n    \"time_estimates\": {\n      \"enabled\": true\n    },\n    \"checklists\": {\n      \"enabled\": true\n    },\n    \"custom_fields\": {\n      \"enabled\": true\n    },\n    \"remap_dependencies\": {\n      \"enabled\": true\n    },\n    \"dependency_warning\": {\n      \"enabled\": true\n    },\n    \"portfolios\": {\n      \"enabled\": true\n    }\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v2/team/{{team_id}}/space",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"team",
+								"{{team_id}}",
+								"space"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Space",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v2/space/{{space_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"space",
+								"{{space_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Spase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\n{\n  \"private\": true,\n  \"multiple_assignees\": true,\n  \"features\": {\n    \"due_dates\": {\n      \"enabled\": true,\n      \"start_date\": true,\n      \"remap_due_dates\": true,\n      \"remap_closed_due_date\": true\n    },\n    \"time_tracking\": {\n      \"enabled\": true\n    },\n    \"tags\": {\n      \"enabled\": true\n    },\n    \"time_estimates\": {\n      \"enabled\": true\n    },\n    \"checklists\": {\n      \"enabled\": true\n    },\n    \"custom_fields\": {\n      \"enabled\": true\n    },\n    \"remap_dependencies\": {\n      \"enabled\": true\n    },\n    \"dependency_warning\": {\n      \"enabled\": true\n    },\n    \"portfolios\": {\n      \"enabled\": true\n    }\n  },\n  \"name\": \"{{$randomFirstName}}\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v2/space/{{space_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"space",
+								"{{space_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Space",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v2/space/{{space_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"space",
+								"{{space_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Folders",
+			"item": [
+				{
+					"name": "Get Folders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v2/space/{{space_id}}/folder",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"space",
+								"{{space_id}}",
+								"folder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Folder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"folder_id\", jsonData.id);",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"//schema",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"id\": { \"type\": \"string\" },",
+									"        \"name\": { \"type\": \"string\" },",
+									"        \"orderindex\": { \"type\": \"integer\" },",
+									"        \"override_statuses\": { \"type\": \"boolean\" },",
+									"        \"hidden\": { \"type\": \"boolean\" },",
+									"        \"space\": {",
+									"            \"type\": \"object\",",
+									"            \"properties\": {",
+									"                \"id\": { \"type\": \"string\" },",
+									"                \"name\": { \"type\": \"string\" },",
+									"                \"access\": { \"type\": \"boolean\" }",
+									"            },",
+									"            \"required\": [\"id\", \"name\", \"access\"]",
+									"        },",
+									"        \"task_count\": { \"type\": \"string\" },",
+									"        \"archived\": { \"type\": \"boolean\" },",
+									"        \"statuses\": { \"type\": \"array\" },",
+									"        \"deleted\": { \"type\": \"boolean\" },",
+									"        \"lists\": { \"type\": \"array\" },",
+									"        \"permission_level\": { \"type\": \"string\" }",
+									"    },",
+									"    \"required\": [",
+									"        \"id\", \"name\", \"orderindex\", \"override_statuses\",",
+									"        \"hidden\", \"space\", \"task_count\", \"archived\",",
+									"        \"statuses\", \"deleted\", \"lists\", \"permission_level\"",
+									"    ]",
+									"};",
+									"",
+									"pm.test(\"JSON Schema is valid for Folder\", function () {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"space_id\":\"{{space_id}}\",\n\"name\":\"{{$randomFirstName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v2/space/{{space_id}}/folder",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"space",
+								"{{space_id}}",
+								"folder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Folder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v2/folder/{{folder_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"folder",
+								"{{folder_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Folder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"space_id\":\"{{space_id}}\",\n\"name\":\"{{$randomFirstName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v2/folder/{{folder_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"folder",
+								"{{folder_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Folder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v2/folder/{{folder_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"folder",
+								"{{folder_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Lists",
+			"item": [
+				{
+					"name": "Get Lists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v2/folder/{{folder_id}}/list",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"folder",
+								"{{folder_id}}",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"list_id\", jsonData.id);",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"//schema",
+									"",
+									"const schema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"id\": { \"type\": \"string\" },",
+									"        \"name\": { \"type\": \"string\" },",
+									"        \"deleted\": { \"type\": \"boolean\" },",
+									"        \"orderindex\": { \"type\": \"integer\" },",
+									"        \"content\": { \"type\": \"string\" },",
+									"        \"priority\": { \"type\": [\"string\", \"null\"] },",
+									"        \"assignee\": { \"type\": [\"string\", \"null\"] },",
+									"        \"due_date\": { \"type\": [\"string\", \"null\"] },",
+									"        \"start_date\": { \"type\": [\"string\", \"null\"] },",
+									"        \"folder\": {",
+									"            \"type\": \"object\",",
+									"            \"properties\": {",
+									"                \"id\": { \"type\": \"string\" },",
+									"                \"name\": { \"type\": \"string\" },",
+									"                \"hidden\": { \"type\": \"boolean\" },",
+									"                \"access\": { \"type\": \"boolean\" }",
+									"            },",
+									"            \"required\": [\"id\", \"name\", \"hidden\", \"access\"]",
+									"        },",
+									"        \"space\": {",
+									"            \"type\": \"object\",",
+									"            \"properties\": {",
+									"                \"id\": { \"type\": \"string\" },",
+									"                \"name\": { \"type\": \"string\" },",
+									"                \"access\": { \"type\": \"boolean\" }",
+									"            },",
+									"            \"required\": [\"id\", \"name\", \"access\"]",
+									"        },",
+									"        \"inbound_address\": { \"type\": \"string\" },",
+									"        \"archived\": { \"type\": \"boolean\" },",
+									"        \"override_statuses\": { \"type\": \"boolean\" },",
+									"        \"statuses\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"id\": { \"type\": \"string\" },",
+									"                    \"status\": { \"type\": \"string\" },",
+									"                    \"orderindex\": { \"type\": \"integer\" },",
+									"                    \"color\": { \"type\": \"string\" },",
+									"                    \"type\": { \"type\": \"string\" },",
+									"                    \"status_group\": { \"type\": \"string\" }",
+									"                },",
+									"                \"required\": [\"id\", \"status\", \"orderindex\", \"color\", \"type\", \"status_group\"]",
+									"            }",
+									"        },",
+									"        \"permission_level\": { \"type\": \"string\" }",
+									"    },",
+									"    \"required\": [",
+									"        \"id\", \"name\", \"deleted\", \"orderindex\", \"content\", \"folder\",",
+									"        \"space\", \"inbound_address\", \"archived\", \"override_statuses\",",
+									"        \"statuses\", \"permission_level\"",
+									"    ]",
+									"};",
+									"",
+									"pm.test(\"JSON Schema is valid for List\", function () {",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "pk_188635527_U0Z10J0B8KGG8P6UP4OZJMVVJY3X9TLF",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"folder_id\": \"{{folder_id}}\",\n    \"name\" : \"{{$randomFirstName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v2/folder/{{folder_id}}/list",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"folder",
+								"{{folder_id}}",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v2/list/{{list_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"list",
+								"{{list_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"folder_id\": \"{{folder_id}}\",\n    \"name\" : \"{{$randomFirstName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v2/list/{{list_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"list",
+								"{{list_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete/Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Змінні",
+									"const baseUrl = pm.environment.get(\"base_url\");",
+									"const folderId = pm.environment.get(\"folder_id\");",
+									"const token = pm.environment.get(\"token\");",
+									"const listId = pm.environment.get(\"list_id\");",
+									"const listName = pm.variables.replaceIn('{{$randomFirstName}}'); // Рандомне ім'я без цифр",
+									"",
+									"// 1️⃣ Видаляємо попередній список, якщо він існує",
+									"if (listId) {",
+									"    console.log(`🗑️ Видалення списку з ID: ${listId}`);",
+									"    pm.sendRequest({",
+									"        url: `${baseUrl}/api/v2/list/${listId}`,",
+									"        method: 'DELETE',",
+									"        header: {",
+									"            'Authorization': `${token}`",
+									"        }",
+									"    }, function (err, response) {",
+									"        if (!err && response.status === 204) {",
+									"            console.log(`✅ Список з ID ${listId} успішно видалено`);",
+									"        } else {",
+									"            console.warn(`⚠️ Помилка при видаленні списку: ${response.status}`);",
+									"        }",
+									"    });",
+									"} else {",
+									"    console.warn(\"⚠️ listId не знайдено в середовищі\");",
+									"}",
+									"",
+									"// 2️⃣ Створюємо новий список",
+									"if (folderId) {",
+									"    console.log(`📌 Створення нового списку у Folder ID: ${folderId}`);",
+									"    pm.sendRequest({",
+									"        url: `${baseUrl}/api/v2/folder/${folderId}/list`,",
+									"        method: 'POST',",
+									"        header: {",
+									"            'Authorization': `${token}`,",
+									"            'Content-Type': 'application/json'",
+									"        },",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify({",
+									"                \"name\": listName,",
+									"                \"content\": \"Created in Delete/Create Script\"",
+									"            })",
+									"        }",
+									"    }, function (err, response) {",
+									"        if (!err && response.status === 200) {",
+									"            const newListId = response.json().id;",
+									"            pm.environment.set(\"list_id\", newListId);",
+									"            console.log(`✅ Список створено з ID: ${newListId}`);",
+									"            console.log(`🌐 Ім'я списку: ${listName}`);",
+									"        } else {",
+									"            console.error(`❌ Помилка при створенні списку: ${response.status}`);",
+									"            console.log(response.json());",
+									"        }",
+									"    });",
+									"} else {",
+									"    console.error(\"❌ Помилка: folder_id відсутній у середовищі\");",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v2/list/{{list_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"list",
+								"{{list_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Перевірка статусу видалення",
+									"pm.test(\"✅ Список успішно видалено\", function () {",
+									"    pm.response.to.have.status(204); // 204 No Content",
+									"});",
+									"",
+									"// Очищення змінної, щоб не було конфліктів",
+									"pm.environment.unset(\"list_id\");",
+									"console.log(\"🗑️ Змінна list_id очищена\");",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v2/list/{{list_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"list",
+								"{{list_id}}"
+							]
+						},
+						"description": "This endpoint allows you to delete a specific list identified by the list ID.\n\n### Request Body\n\nThis request does not require a request body.\n\n### Response\n\nUpon successful deletion, the server will respond with a status code of 200 and an empty JSON object in the response body."
+					},
+					"response": []
+				},
+				{
+					"name": "Create/Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Pre-request script to create a List",
+									"pm.sendRequest({",
+									"    url: `${pm.environment.get(\"base_url\")}/api/v2/folder/${pm.environment.get(\"folder_id\")}/list`,",
+									"    method: 'POST',",
+									"    header: {",
+									"        'Authorization': pm.environment.get(\"token\"),",
+									"        'Content-Type': 'application/json'",
+									"    },",
+									"    body: {",
+									"        mode: 'raw',",
+									"        raw: JSON.stringify({",
+									"            \"folder_id\": pm.environment.get(\"folder_id\"),",
+									"            \"name\": `Auto-Generated List ${new Date().getTime()}`",
+									"        })",
+									"    }",
+									"}, function (err, response) {",
+									"    if (err) {",
+									"        console.log(\"Error creating list:\", err);",
+									"    } else {",
+									"        const jsonData = response.json();",
+									"        pm.environment.set(\"list_id\", jsonData.id);",
+									"        console.log(\"New List Created with ID:\", jsonData.id);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v2/list/{{list_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"list",
+								"{{list_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
